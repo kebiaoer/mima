@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>密码验证</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 40px;
+        }
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        label {
+            font-size: 16px;
+            margin-bottom: 8px;
+            display: block;
+        }
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .password-requirements {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 20px;
+        }
+        .requirement {
+            margin: 5px 0;
+        }
+        .requirement.valid {
+            color: green;
+        }
+        .requirement.invalid {
+            color: red;
+        }
+        .submit-btn {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .submit-btn:disabled {
+            background-color: #ccc;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>密码验证</h1>
+        <label for="password">请输入密码：</label>
+        <input type="password" id="password" placeholder="请输入密码" required>
+        
+        <div class="password-requirements">
+            <div class="requirement" id="length" class="invalid">长度至少 8 个字符</div>
+            <div class="requirement" id="uppercase" class="invalid">必须包含大写字母</div>
+            <div class="requirement" id="lowercase" class="invalid">必须包含小写字母</div>
+            <div class="requirement" id="special" class="invalid">必须包含特殊符号（如：!@#$%^&*）</div>
+        </div>
+        
+        <button class="submit-btn" id="submitBtn" disabled>提交</button>
+    </div>
+
+    <script>
+        // 获取相关DOM元素
+        const passwordInput = document.getElementById('password');
+        const submitBtn = document.getElementById('submitBtn');
+        
+        // 获取每个验证项
+        const lengthRequirement = document.getElementById('length');
+        const uppercaseRequirement = document.getElementById('uppercase');
+        const lowercaseRequirement = document.getElementById('lowercase');
+        const specialRequirement = document.getElementById('special');
+        
+        // 正则表达式
+        const regexUppercase = /[A-Z]/;
+        const regexLowercase = /[a-z]/;
+        const regexSpecial = /[!@#$%^&*(),.?":{}|<>]/;
+        
+        // 密码验证函数
+        function validatePassword(password) {
+            let isValid = true;
+            
+            // 长度检查
+            if (password.length >= 8) {
+                lengthRequirement.classList.remove('invalid');
+                lengthRequirement.classList.add('valid');
+            } else {
+                lengthRequirement.classList.remove('valid');
+                lengthRequirement.classList.add('invalid');
+                isValid = false;
+            }
+            
+            // 大写字母检查
+            if (regexUppercase.test(password)) {
+                uppercaseRequirement.classList.remove('invalid');
+                uppercaseRequirement.classList.add('valid');
+            } else {
+                uppercaseRequirement.classList.remove('valid');
+                uppercaseRequirement.classList.add('invalid');
+                isValid = false;
+            }
+            
+            // 小写字母检查
+            if (regexLowercase.test(password)) {
+                lowercaseRequirement.classList.remove('invalid');
+                lowercaseRequirement.classList.add('valid');
+            } else {
+                lowercaseRequirement.classList.remove('valid');
+                lowercaseRequirement.classList.add('invalid');
+                isValid = false;
+            }
+            
+            // 特殊符号检查
+            if (regexSpecial.test(password)) {
+                specialRequirement.classList.remove('invalid');
+                specialRequirement.classList.add('valid');
+            } else {
+                specialRequirement.classList.remove('valid');
+                specialRequirement.classList.add('invalid');
+                isValid = false;
+            }
+
+            // 启用/禁用提交按钮
+            submitBtn.disabled = !isValid;
+        }
+        
+        // 监听密码输入事件
+        passwordInput.addEventListener('input', function() {
+            const password = passwordInput.value;
+            validatePassword(password);
+        });
+        
+        // 提交按钮点击事件
+        submitBtn.addEventListener('click', function() {
+            const password = passwordInput.value;
+            if (password) {
+                alert('密码验证通过！');
+            } else {
+                alert('请输入有效的密码');
+            }
+        });
+    </script>
+</body>
+</html>
